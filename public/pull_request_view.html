@@ -5,6 +5,8 @@
 	<nav id="differences">
 		<div>Changes for Review {{.PullRequest.Number}} : {{.PullRequest.Title}}</div>
 		<div id="pr-files-list">
+			<h5>{{index .Changes.ChangedFiles 0}}</h5>
+            <div>{{.Changes.Content}}</div>
 		</div>
 
 		<div>

@@ -193,15 +193,23 @@ func pullRequestView(c *Context) error {
 		return err
 	}
 
+	changes, err := git.PullRequestChanges(client, pr, repoName)
+	if nil != err {
+		return err
+	}
+
 	diffs, err := git.PullRequestDiffList(client, client.Username, repoOwner, repoName, *pr.Head.SHA, `^book/text/.*`)
 	if nil != err {
 		return err
 	}
+
 	c.D[`Diffs`] = diffs
 	c.D[`SHA`] = *pr.Head.SHA
 	c.D[`PullURL`] = *pr.Head.Repo.CloneURL
 
-	return c.Render(`pull_request_view.html`, nil)
+	return c.Render(`pull_request_view.html`, map[string]interface{}{
+		"Changes":    changes,
+	})
 }
 
 func pullRequestCreate(c *Context) error {
