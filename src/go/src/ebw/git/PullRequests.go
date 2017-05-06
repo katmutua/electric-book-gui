@@ -11,8 +11,6 @@ import (
 
 	"ebw/config"
 	"ebw/util"
-	"net/http"
-	"io/ioutil"
 )
 
 // ListPullRequests returns a list of the Pull Requests for the
@@ -206,28 +204,4 @@ title, notes string) error {
 	}
 	fmt.Printf("Created PR %d on %s/%s\n", *pr.Number, upstreamUser, upstreamRepo)
 	return nil
-}
-
-func PullRequestChanges(client *Client, pr *github.PullRequest, repoName string) ([] string, error) {
-	var cf [] string
-	c, _, err := client.PullRequests.ListFiles(client.Context,
-		client.Username, repoName, pr.GetNumber(), nil)
-	if nil != err {
-		return nil, err
-	}
-	cf = append(cf, c[0].GetFilename())
-
-	response, err := http.Get(pr.GetDiffURL())
-	if nil != err {
-		return nil, err
-	}
-
-	//fetch diff content from diff url
-	data, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return nil, err
-	}
-
-	cf = append(cf, string(data))
-	return cf, nil
 }
