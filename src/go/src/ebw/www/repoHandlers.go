@@ -193,7 +193,6 @@ func pullRequestView(c *Context) error {
 		return err
 	}
 
-	changes, err := git.PullRequestChanges(client, pr, repoName)
 	if nil != err {
 		return err
 	}
@@ -207,9 +206,7 @@ func pullRequestView(c *Context) error {
 	c.D[`SHA`] = *pr.Head.SHA
 	c.D[`PullURL`] = *pr.Head.Repo.CloneURL
 
-	return c.Render(`pull_request_view.html`, map[string]interface{}{
-		"Changes":    changes,
-	})
+	return c.Render(`pull_request_view.html`, nil)
 }
 
 func pullRequestCreate(c *Context) error {
