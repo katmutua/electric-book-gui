@@ -193,10 +193,6 @@ func pullRequestView(c *Context) error {
 		return err
 	}
 
-	if nil != err {
-		return err
-	}
-
 	diffs, err := git.PullRequestDiffList(client, client.Username, repoOwner, repoName, *pr.Head.SHA, `^book/text/.*`)
 	if nil != err {
 		return err
