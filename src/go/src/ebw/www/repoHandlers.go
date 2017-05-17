@@ -136,7 +136,13 @@ func repoDetails(c *Context) error {
 	c.D[`UserName`] = client.Username
 	c.D[`RepoOwner`] = repoOwner
 	c.D[`RepoName`] = repoName
-	c.D[`RepoFiles`], err = git.ListAllRepoFiles(client, client.Username, repoOwner, repoName)
+
+	repoDir, err := git.RepoDir(client.Username, repoOwner, repoName)
+	if nil != err {
+		return err
+	}
+
+	c.D[`RepoFiles`], err = git.ListChangedFiles(client, prs, repoDir, client.Username, repoOwner, repoName)
 	if nil != err {
 		return err
 	}
