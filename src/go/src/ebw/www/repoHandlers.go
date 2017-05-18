@@ -142,10 +142,14 @@ func repoDetails(c *Context) error {
 		return err
 	}
 
-	c.D[`RepoFiles`], err = git.ListChangedFiles(client, prs, repoDir, client.Username, repoOwner, repoName)
-	if nil != err {
-		return err
+	if(len(prs) > 1) {
+		//What commit hash do we need to use here?
+		val, err := git.ListChangedFiles(client, prs[0].Base.GetSHA(), repoDir, client.Username, repoOwner, repoName)
+		if nil != err {
+		}
+		c.D[`RepoFiles`] = val
 	}
+
 	return c.Render(`repo_detail.html`, map[string]interface{}{
 		"Repo":    repo,
 	})
